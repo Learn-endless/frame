@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class User {
     private int id;
     private String name;
-    public User(){
-        System.out.println("Spring管理了 User 类 ...");
-    }
+//    public User(){
+//        System.out.println("Spring管理了 User 类 ...");
+//    }
     public void hello(){
         System.out.println("hello Spring!"+name+id);
     }
