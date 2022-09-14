@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initialscale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/jquery.min.js"></script>
+    <title>登录页面</title>
+</head>
+<body>
+    <div style="text-align: center;">
+        <h1>登录</h1>
+       ⽤户：<input id="username">
+        <br>
+       密码：<input id="password" type="password">
+        <br>
+        <input type="button" value=" 提交 " onclick="mysub()"style="margin-top: 20px;margin-left: 50px;">
+    </div>
+
+    <script>
+        //通过一个方法来发送请求
+        function mysub(){
+            //1. 获取组件对象(这里使用 jQuery 的方式来完成)
+            let username = jQuery("#username");
+            let password = jQuery("#password");
+            //2. 判空
+            if(jQuery.trim(username.val()) == ""){
+                alert("请输入用户名!");
+                //来一个光标重置
+                username.focus();
+                return;
+            }
+            if(jQuery.trim(password.val()) == ""){
+                alert("请输入密码!");
+                password.focus();
+                return;
+            }
+            //3. 发送一个ajax的请求
+            jQuery.ajax({
+                url:"/user/login2",
+                type:"post",
+                contentType:"application/json",
+                //返回一个 json 对象
+                data:JSON.stringify({
+                    "username":username.val(),
+                    "password":password.val(),
+                }),
+                // 回调函数
+                success:function(result){
+                    alert(JSON.stringify(result));
+                    return;
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
