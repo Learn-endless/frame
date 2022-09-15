@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 表示具体实现哪个接口（路径） -->
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+    <select id="getUserById" resultType="com.example.demo.model.UserInfo">
+        select * from userinfo where id=${id}
+    </select>
+
+</mapper>

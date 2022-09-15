@@ -1,0 +1,8 @@
+# 使用开发时运行环境
+spring:
+  profiles:
+    active: dev
+
+# 配置 mybatis xml 的存储路径
+mybatis:
+  mapper-locations: classpath:mybatis/**Mapper.xml
