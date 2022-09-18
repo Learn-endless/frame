@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,7 +33,7 @@ public class UserService {
         User user = userMapper.getUserByName(username);
         //2. 校验查找到的数据是否正确
         if(user == null || !password.equals(user.getPassword())){
-            return "redirect:/isError.html";
+            return "redirect:/is_error.html";
         }
         //3. 创建一个session,并将用户信息放到里面
         HttpSession session = request.getSession(true);
@@ -62,9 +63,35 @@ public class UserService {
             return new Object();
         }
 
-        //5. 隐藏用户的 password ,并返回 用户信息
-        user.setPassword("");
+        //5. 使用HasMap的方式返回自定义数据，方便详情页显示 作者文章数 和 单篇访问量
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("userId",user.getUserId());
+        map.put("username",user.getUsername());
+        map.put("blogId",blog.getBlogId());
+        return map;
+    }
 
-        return user;
+    //用户注册功能
+    public Object addUser(HttpServletRequest request,String username,String password){
+
+        //创建一个对象，方便使用
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        //调用接口添加用户
+        Integer integer = userMapper.addUser(user);
+        if(integer.equals(0)){
+            //表示添加失败
+            return new Object();
+        }else{
+            //获取session
+            HttpSession session = request.getSession(true);
+            //清除密码
+            user.setPassword("");
+            //将用户信息存放到session中
+            session.setAttribute("user",user);
+            //直接返回user对象
+            return user;
+        }
     }
 }

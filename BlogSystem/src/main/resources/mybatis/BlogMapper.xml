@@ -24,4 +24,9 @@
         delete from blog where blogId=#{blogId}
     </delete>
 
+    <!--  通过userId获取博客文章集合  -->
+    <select id="getBlogByUserId" resultType="com.example.demo.model.Blog">
+        select * from blog where userId = #{userId}
+    </select>
+
 </mapper>

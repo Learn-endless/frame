@@ -19,7 +19,7 @@
     <!-- 导航栏 -->
     <div class="nav">
         <img src="image/tiger.png" >
-        <span>我的博客系统</span>
+        <span>用户未登录</span>
         <a href="blog_list.html">主页</a>
         <a href="blog_edit.html">写博客</a>
         <a href="cancel">注销</a>
@@ -32,14 +32,14 @@
             <div class="card">
                 <img src="image/dog.png" alt="">
                 <span></span>
-                <a href="https://github.com/Learn-endless">github 地址</a>
+                <a href="#">作者信息</a>
                 <div class="res">
-                    <span>文章</span>
-                    <span>分类</span>
+                    <span>文章数</span>
+                    <span>访问量</span>
                 </div>
                 <div class="res">
-                    <span>2</span>
-                    <span>1</span>
+                    <span id="art">0</span>
+                    <span id="page">0</span>
                 </div>
             </div>
         </div>
@@ -76,8 +76,10 @@
                 success:function(body){
                     //判断body中对象的 userId = 0
                     if(body.username && body.userId > 0){
-                        console.log("用户以登录,用户:"+body.username);
-
+                        console.log("用户已登录,用户:"+body.username);
+                        let userShow = document.querySelector(".nav>span");
+                        userShow.innerHTML = "";
+                        userShow.innerHTML = body.username;
                         //在这里调用 authorName() 用来显示用户信息和删除按钮
                         authorName(body);
                     }else{
@@ -111,6 +113,13 @@
                             //将 a 挂到 dom树上
                             nav.appendChild(a);
                         }
+
+                        //先使对应的 blog 的访问量加一
+                        addBlogPageViewById(body.blogId);
+
+                        //然后查询 文章数 和 单篇访问量
+                        authorMessage(body.userId,body.blogId);
+
                     }else{
                         //没有username属性，就打印一些原因
                         console.log("获取失败!,原因："+ body.reason);
@@ -118,6 +127,62 @@
                 },
             });
         };
+
+
+        //将所对应的 blogId 的博客文章的访问量加一
+        function addBlogPageViewById(blogId){
+            jQuery.ajax({
+                type: "post",
+                url: "addpageview",
+                data: {
+                    "blogId":blogId
+                },
+                success:function(body){
+                    //检查是否增加成功(通过查看是否有 number 属性来判断)
+                    if(body.number){
+                        //表示增加成功
+                        console.log("访问量增加成功");
+                        return;
+                    }else{
+                        console.log("访问量增加失败"+body);
+                        return;
+                    }
+                },
+                error: function(body){
+                    console.log("请求失败"+body);
+                }
+            });
+        }
+
+
+
+        //获取该文章作者的 文章数 和 该篇访问量(拿到之前的访问量,然后加1显示)
+        function authorMessage(userId,blogId){
+            jQuery.ajax({
+                type: "get",
+                url: "getmessage",
+                data:{
+                    "userId":userId,
+                    "blogId":blogId
+                },
+                success: function(body){
+                    //获取标签对象
+                    let art = document.querySelector(".res>#art");
+                    let page = document.querySelector(".res>#page");
+                    //文章数检测
+                    if(body.art){
+                        art.innerHTML = body.art;
+                    }
+                    //访问量检测
+                    if(body.page){
+                        page.innerHTML = body.page;
+                    }
+                },
+                error:function(body){
+                    console.log("请求失败"+body);
+                }
+            });
+        }
 
         //检查用户是否登录 check_login.js
         getUserInfo();

@@ -20,4 +20,7 @@ public interface UserMapper {
     //通过 用户id 获取 user 对象
     User getUserById(Integer userId);
 
+    //添加用户
+    Integer addUser(User user);
+
 }

@@ -44,4 +44,18 @@ public class Utils {
 
         return res;
     }
+
+
+    //用户须知 置顶
+    public List<Blog> userBlogTop(List<Blog> list){
+        List<Blog> res = new ArrayList<>();
+        for(Blog blog : list){
+            if(blog.getBlogId() == 4){
+                res.add(0,blog);
+            }else{
+                res.add(blog);
+            }
+        }
+        return res;
+    }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间是 dao接口的类路径-->
+<mapper namespace="com.example.demo.mapper.ProductMapper">
+
+    <!--查询 id 属性值是接口中对应的方法名-->
+    <select id="findAll" resultType="com.example.demo.model.Product">
+        select * from product
+    </select>
+
+    <select id="findByName" resultType="com.example.demo.model.Product">
+        select * from product where name like '%' #{name} '%' limit #{start},#{end}
+    </select>
+
+
+
+</mapper>

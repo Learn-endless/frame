@@ -27,7 +27,5 @@ class BlogMapperTest {
         System.out.println(blog);
     }
 
-    @Test
-    void getAllBlog() {
-    }
+
 }

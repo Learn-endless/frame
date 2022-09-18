@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.example.demo.mapper.UserMapper">
 
     <!--  根据用户名查询用户信息  -->
@@ -12,5 +13,10 @@
     <select id="getUserById" resultType="com.example.demo.model.User">
         select * from user where userId=#{userId}
     </select>
+
+    <!--  添加用户  -->
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="userId" keyColumn="userId" >
+        insert into user(username,password)values(#{username},#{password})
+    </insert>
 
 </mapper>

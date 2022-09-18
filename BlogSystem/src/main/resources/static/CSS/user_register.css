@@ -1,0 +1,124 @@
+.register-container{
+    height: 100%;
+    width: 100%;
+    /* 使用弹性布局使里面的元素横向居中 */
+    display: flex;
+    justify-content: center;
+}
+.register{
+    height: 90%;
+    width: 35%;
+    /* 上外边距 */
+    margin-top: 5px;
+    /* 背景颜色 */
+    background-color: rgba(255, 255, 255, 0.8);
+    /* 设置圆角 */
+    border-radius: 10px;
+}
+
+/* 标题样式 */
+.con .title{
+    text-align: center;
+    font-size: 30px;
+    font-weight: 900;
+    padding-bottom: 20px;
+    padding-top: 50px;
+}
+
+/* 每一行的样式 */
+.con .yard{
+    width: 320px;
+    margin: 0 auto;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+/* 每一行中 span标签 的样式 */
+.yard span{
+    font-size: 20px;
+    font-weight: 900;
+}
+
+/* 中间三行的中 input 的样式 */
+.yard .A{
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    text-indent: 0.5em;
+    font-size: 15px;
+
+    /* 去掉轮廓线 */
+    outline: none;
+}
+
+/* 验证码那一行的 input 的样式 */
+.yard .B{
+    width: 120px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    text-indent: 0.5em;
+    font-size: 15px;
+
+    /* 去掉轮廓线 */
+    outline: none;
+}
+
+/* 注册按钮那一行的样式 */
+.con .first{
+    width: 320px;
+    height: 50px;
+
+    /* background-color: red; */
+    margin: 0 auto;
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 注册按钮的样式 */
+.first input{
+    width: 320px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    /* 去掉边框 */
+    border: none;
+    background-color: green;
+
+    transition: all;
+}
+
+/* 添加一个鼠标悬停样式 */
+.first input:hover{
+    background-color: red;
+}
+
+
+/* 验证码样式 */
+.yard #canvas{
+    height: 80px;
+    width: 185px;
+    vertical-align: middle;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.yard #stamp{
+    height: 30px;
+    width: 50px;
+    border-radius: 5px;
+    border: none;
+}
+
+.yard #stamp:hover{
+    background-color: blue;
+}

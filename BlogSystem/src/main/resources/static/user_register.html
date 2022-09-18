@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作者注册</title>
+    <link rel="stylesheet" href="CSS/common.css">
+    <link rel="stylesheet" href="CSS/user_register.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="nav">
+        <img src="image/tiger.png" >
+        <span>我的博客系统</span>
+        <a href="blog_login.html">返回登录</a>
+        <a href="blog_list.html">主页</a>
+        <a href="blog_edit.html">写博客</a>
+    </div>
+
+    <!-- 用户注册 -->
+    <div class="register-container">
+        <div class="register">
+            <div class="con">
+                <div class="title">用户注册</div>
+                <div class="yard">
+                    <span>用户名：</span>
+                    <input type="text" id="username" class="A">
+                </div>
+                <div class="yard">
+                    <span>密码：</span>
+                    <input type="password" id="password1" class="A">
+                </div>
+                <div class="yard">
+                    <span>确认密码：</span>
+                    <input type="password" id="password2" class="A">
+                </div>
+                <div class="yard">
+                    <input type="text" class="B" placeholder="请输入验证码~" id="yzm">
+                    <!-- 验证码 -->
+                    <span>
+                        
+                        <canvas id="canvas"></canvas>
+
+                    </span>
+                </div>
+                <div class="yard">
+                    <span></span>
+                    <button id="stamp">换一张</button>
+                </div>
+                <div class="first">
+                    <input type="button" value="注册">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+
+    <script src="js/YZM.js"></script>
+
+    <script>
+        let stamp = document.querySelector("#stamp");
+        let username = document.querySelector("#username");
+        let password1 = document.querySelector("#password1");
+        let password2 = document.querySelector("#password2");
+        let YZM = document.querySelector("#yzm");
+        let button = document.querySelector(".first input");
+
+        // 首次进入页面时生成验证码
+        let yzm = captcha('#canvas',185*2,80*2);
+        // 验证码刷新按钮点击事件
+        stamp.onclick = function(){
+            // 调用函数，并得到验证码的值
+            yzm = captcha('#canvas',185*2,80*2);
+            console.log(yzm);
+        }
+
+        // 注册按钮点击事件
+        button.onclick = function(){
+            // 判断用户名是否为空
+            let user = username.value+"";
+            if(user.trim() === ""){
+                alert("用户名不能为空！");
+                // 聚焦与用户名输入框
+                username.focus();
+                return;
+            }
+            // 检测密码输入框是否为空
+            let pass1 = password1.value+"";
+            let pass2 = password2.value+"";
+            if(pass1.trim()==="" || pass2.trim()===""){
+                alert("密码不能为空!");
+                // 同样聚焦于输入框
+                password1.focus();
+                return;
+            }
+            // 前端检测两次密码是否一致
+            if(pass1.trim() != pass2.trim()){
+                alert("两次密码输入不一致！");
+                // 清空输入框的内容
+                password1.innerHTML = "";
+                password2.innerHTML = "";
+                // 聚焦于第一个密码输入框
+                password1.focus();
+                return;
+            }
+            // 检测验证码输入的是否正确
+            let yzmResult = YZM.value;
+            // 去空格
+            yzmResult =  yzmResult.trim();
+            // 去掉大写字符
+            yzmResult =  yzmResult.toLowerCase();
+            yzm = yzm.toLowerCase();
+            if(yzmResult != yzm){
+                YZM.value = "";
+                alert("验证码不正确!");
+                // 同样也聚焦于验证码输入框
+                YZM.focus();
+                return;
+            }
+
+            // 到这里就需要发送请求给后端了
+            jQuery.ajax({
+                type: "post",
+                url: "register",
+                data:{
+                    "username":username.value,
+                    "password1":password1.value,
+                    "password2":password2.value,
+                    "userYzm":YZM.value,
+                    "yzm":yzm
+                },
+                success:function(body){
+                    //如果body里面有一个userId属性，就说明添加成功
+                    if(body.userId){
+                        location.assign('blog_list.html');
+                    }else{
+                        //说明注册失败
+                        alert("注册失败,请重新注册!")
+                        location.assign('user_register.html');
+                    }
+                },
+                error:function(body){
+                    console.log("请求失败!"+body);
+                }
+            });
+        }
+        
+    </script>
+
+</body>
+</html>

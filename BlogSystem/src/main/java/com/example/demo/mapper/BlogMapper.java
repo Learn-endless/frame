@@ -26,4 +26,8 @@ public interface BlogMapper {
 
     //删除博客
     Integer deleteBlog(Integer blogId);
+
+    //通过 userId 查询博客文章
+    List<Blog> getBlogByUserId(Integer userId);
+
 }

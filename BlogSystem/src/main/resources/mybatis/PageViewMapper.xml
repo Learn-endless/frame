@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.PageViewMapper">
+
+    <!--  获取总访问量  -->
+    <select id="getAllPageView" resultType="com.example.demo.model.PageView">
+        select * from page_view
+    </select>
+
+    <!--  获取单篇博客的访问量  -->
+    <select id="getPageViewById" resultType="com.example.demo.model.PageView">
+        select * from page_view where blogId = #{blogId}
+    </select>
+
+    <!--  增加博客访问量  -->
+    <update id="addBlogPageViewById">
+        update page_view set number = #{number} where blogId = #{blogId}
+    </update>
+
+    <!--  通过 blogId 获取单篇博客访问量  -->
+    <select id="getPageViewByBlogId" resultType="com.example.demo.model.PageView">
+        select * from page_view where blogId = #{blogId}
+    </select>
+
+    <insert id="addPageView">
+        insert into page_view values(#{blogId},0)
+    </insert>
+
+</mapper>

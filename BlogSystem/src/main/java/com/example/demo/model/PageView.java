@@ -8,15 +8,13 @@ import lombok.NoArgsConstructor;
  * Created with IntelliJ IDEA.
  * Description:
  * User: 19833
- * Date: 2022-09-16
- * Time: 16:01
+ * Date: 2022-09-18
+ * Time: 10:30
  */
-//用户实体类
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    private Integer userId;
-    private String username;
-    private String password;
+public class PageView {
+    private Integer blogId;
+    private Long  number;
 }
