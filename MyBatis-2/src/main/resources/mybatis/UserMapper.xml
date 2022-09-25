@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+    <!--  通过 id 查询用户对象信息(针对 Integer 类型的参数 # 和 $ 效果一样)  -->
+    <select id="getUserById" resultType="com.example.demo.model.UserInfo">
+        select * from userinfo where id = ${id}
+    </select>
+
+    <!--  通过 name 查询用户对象信息(直接使用 $ 会出问题：缺少引号，sql注入问题)  -->
+    <select id="getUserByName" resultType="com.example.demo.model.UserInfo">
+        select * from userinfo where username = '${name}'
+    </select>
+
+    <!--  通过 name 查询用户（模糊匹配）,缺少引号 -->
+    <!--  #:预处理，如果是String类型的值在传递时会加上引号  -->
+    <!--  $:字符串直接替换，如果是String类型的值在传递时不会有引号，直接就是字符串替换  -->
+    <!--  使用 concat 提供的字符串拼接函数  -->
+    <select id="getUserByNameLike" resultType="com.example.demo.model.UserInfo">
+        select * from userinfo where username like concat('%',#{name},'%')
+    </select>
+
+    <resultMap id="Base" type="com.example.demo.model.UserInfo">
+        <!--   主键映射     -->
+        <id column="id" property="id"></id>
+        <!--    普通字段映射    -->
+        <result column="username" property="name"></result>
+        <result column="password" property="password"></result>
+        <result column="photo" property="photo"></result>
+        <result column="createtime" property="createtime"></result>
+        <result column="updatetime" property="updatetime"></result>
+        <result column="state" property="state"></result>
+
+        <collection property="articleInfoList" resultMap="com.example.demo.mapper.ArticleMapper.Base"
+        columnPrefix="a_"
+        ></collection>
+    </resultMap>
+
+    <!--  通过 id 查询（使用 resultMap 来解决表中字段和类中属性名不一致问题）  -->
+    <select id="getUserById2" resultMap="Base">
+        select * from userinfo where id = #{id}
+    </select>
+
+
+    <!--  多表联查，多对一的情况下  -->
+    <select id="getUserById3" resultMap="Base">
+        select u.*,a.id a_id,a.title a_title,
+        a.content a_content,a.createtime a_createtime,
+        a.updatetime a_updatetime,a.uid a_uid,
+        a.rcount a_rcount,a.state a_state from
+        userinfo u left join articleinfo a on u.id = a.uid
+        where u.id = #{id}
+    </select>
+
+    <!--  添加用户（尝试使用 trim 标签来完成祛逗号的功能）  -->
+    <insert id="addUser">
+        insert into userinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="photo != null">
+                photo,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="password != null">
+                #{password},
+            </if>
+            <if test="photo != null">
+                #{photo},
+            </if>
+        </trim>
+    </insert>
+
+    <resultMap id="Base2" type="com.example.demo.model.UserInfo">
+        <id column="id" property="id"></id>
+        <result column="username" property="name"></result>
+    </resultMap>
+
+    <!--  根据所传的参数查询一条或多条用户信息  -->
+    <select id="getUserOrAll" resultMap="Base2">
+        select * from userinfo
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null">
+                and username = #{name}
+            </if>
+            <if test="password != null">
+                and password = #{password}
+            </if>
+        </where>
+    </select>
+
+    <!--   根据所传参数修改用户信息（动态标签中的 set 使用）  -->
+    <update id="updateUserById">
+        update userinfo
+        <set>
+            <if test="name != null">
+                username=#{name},
+            </if>
+            <if test="password != null">
+                password=#{password},
+            </if>
+            <if test="photo != null">
+                photo=#{photo},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <!--  根据所传参数批量删除用户信息（动态标签中的 foreach 使用）  -->
+    <delete id="delUserById">
+        delete from userinfo where id in
+        <foreach collection="ids" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

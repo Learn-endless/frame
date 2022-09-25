@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ArticleMapper">
+
+    <resultMap id="Base" type="com.example.demo.model.ArticleInfo">
+        <id column="id" property="id"></id>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="createtime" property="createtime"></result>
+        <result column="updatetime" property="updatetime"></result>
+        <result column="uid" property="uid"></result>
+        <result column="rcount" property="rcount"></result>
+        <result column="state" property="state"></result>
+        <association property="userInfo"
+                     resultMap="com.example.demo.mapper.UserMapper.Base"
+                     columnPrefix="u_"
+        >
+        <!--     columnPrefix用来解决多表联查时多表之间字段名重复时的情况       -->
+
+        </association>
+    </resultMap>
+
+    <!--  多表联查：一对一情况下  -->
+    <select id="getArticleById" resultMap="Base">
+        select a.*,u.id u_id,u.username u_username,u.password u_password,
+        u.photo u_photo, u.createtime u_createtime,u.updatetime u_updatetime,u.state u_state
+        from articleinfo a left join userinfo u on a.uid = u.id where a.id = #{id}
+    </select>
+
+    <!--  使用 动态sql 标签中的 if 标签 来添加文章（模拟存在非必传的参数） -->
+    <insert id="addArticle" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into articleinfo(id,title
+        <if test="content != null">
+            ,content
+        </if>
+        ) values(#{id},#{title}
+        <if test="content != null">
+            ,#{content}
+        </if>
+        );
+    </insert>
+</mapper>
