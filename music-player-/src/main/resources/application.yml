@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 100MB
+
+
+# mybatis 的扫描路径
+mybatis:
+  mapper-locations: classpath:mybatis/**Mapper.xml
