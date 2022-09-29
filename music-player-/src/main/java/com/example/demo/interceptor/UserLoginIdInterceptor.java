@@ -28,13 +28,10 @@ public class UserLoginIdInterceptor implements HandlerInterceptor {
         // 1. 获取 session
         HttpSession session = request.getSession(false);
         // 2. 判断
-        if(session != null && session.getAttribute(Constant.USER_INFO_SESSION_KEY) != null){
-            // 说明用户以登录
-            return true;
+        if(session == null || session.getAttribute(Constant.USER_INFO_SESSION_KEY) == null){
+            response.sendRedirect("/login.html");
+            return false;
         }
-        // 3. 没有登录,重定向到 login.html
-
-        response.sendRedirect("/login.html");
         return true;
     }
 }

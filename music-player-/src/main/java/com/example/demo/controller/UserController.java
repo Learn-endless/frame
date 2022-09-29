@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
-import com.example.demo.tools.Constant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +18,7 @@ import javax.servlet.http.HttpSession;
  * Date: 2022-09-28
  * Time: 9:18
  */
+
 @RestController
 @RequestMapping("/user")            //一级路径
 public class UserController {
@@ -43,21 +43,7 @@ public class UserController {
         user.setPassword(password);
 
         //调用 service 中的接口查询 user 对象信息
-        User userTest = (User) userService.login(user);
-
-        // 判断一下查到的数据是否为null
-        if(userTest != null){
-            userTest.setPassword("");  //密码隐藏
-
-            //将用户信息添加到 session 中
-            HttpSession session = request.getSession(true);
-            session.setAttribute(Constant.USER_INFO_SESSION_KEY,userTest);
-
-            //返回查询出来的 user 对象信息
-            return userTest;
-        }
-        // 返回 msg 信息
-        return "用户名或密码有误";
+        return userService.login(request,user);
     }
 
 

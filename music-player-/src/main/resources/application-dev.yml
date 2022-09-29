@@ -15,3 +15,12 @@ logging:
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+private:
+  key:
+    url: f:/private.txt
+
+public:
+  key:
+    url: f:/public.txt

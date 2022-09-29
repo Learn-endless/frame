@@ -14,7 +14,6 @@ create table if not exists user(
     status boolean default false         -- 用户权限
 );
 
-
 insert into user(username,password,status) values
 ('admin','admin',1),
 ('张三','123',0);
@@ -29,7 +28,6 @@ create table if not exists music(
     url varchar(1000) not null,
     uid int not null
 );
-
 
 -- 创建 user 和 music 的中间表
 drop table if exists lovemusic;
